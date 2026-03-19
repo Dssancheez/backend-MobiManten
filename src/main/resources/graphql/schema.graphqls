@@ -1,0 +1,28 @@
+type CocheOutput {
+    id: ID
+    modelo: String
+    marca: String
+    motor: String
+    anio: Int
+    imagenUrl: String
+    tipo: String
+}
+
+input CocheInput {
+    modelo: String
+    marca: String
+    motor: String
+    anio: Int
+    imagenUrl: String
+    tipo: String
+}
+
+type Query {
+
+    getCoches : [CocheOutput]
+}
+
+
+type Mutation {
+    crearCoche(input: CocheInput): CocheOutput
+}
