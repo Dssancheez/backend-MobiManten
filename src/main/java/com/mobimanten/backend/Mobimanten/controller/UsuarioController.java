@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import org.springframework.graphql.execution.ErrorType;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,10 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GraphQlExceptionHandler
-    public GraphQLError handle(RuntimeException ex) {
+    public GraphQLError handle(Exception ex) {
+        ex.printStackTrace(); // Imprime el error en los logs de Railway/Consola
         return GraphqlErrorBuilder.newError()
-                .errorType(graphql.ErrorClassification.errorClassification("BAD_REQUEST"))
+                .errorType(ErrorType.BAD_REQUEST)
                 .message(ex.getMessage())
                 .build();
     }
