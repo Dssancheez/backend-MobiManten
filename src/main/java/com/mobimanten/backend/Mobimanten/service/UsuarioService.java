@@ -46,6 +46,9 @@ public class UsuarioService implements IUsuarioService {
     }
 
     public UsuariosDocument registrarUsuario(RegistroInput input) {
+        if (usuarioRepository.findByEmail(input.email()).isPresent()) {
+            throw new RuntimeException("El email ya está registrado");
+        }
 
         UsuariosDocument nuevoUsuario = mapearUsuario(input);
 

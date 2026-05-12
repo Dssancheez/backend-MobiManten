@@ -8,6 +8,9 @@ import com.mobimanten.backend.Mobimanten.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import graphql.GraphQLError;
+import graphql.GraphqlErrorBuilder;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,9 +19,16 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GraphQlExceptionHandler
+    public GraphQLError handle(RuntimeException ex) {
+        return GraphqlErrorBuilder.newError()
+                .errorType(graphql.ErrorClassification.errorClassification("BAD_REQUEST"))
+                .message(ex.getMessage())
+                .build();
+    }
+
     @MutationMapping
     public UsuariosDocument registrarUsuario(@Argument RegistroInput input) {
-
         return usuarioService.registrarUsuario(input);
     }
 
