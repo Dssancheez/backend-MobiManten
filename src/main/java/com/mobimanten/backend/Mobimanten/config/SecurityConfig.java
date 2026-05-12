@@ -2,6 +2,7 @@ package com.mobimanten.backend.Mobimanten.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +29,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/graphql", "/graphiql/**").permitAll()
                         .anyRequest().authenticated()
                 );
@@ -41,9 +43,8 @@ public class SecurityConfig {
         // Permitimos Vercel, localhost y cualquier otro origen que necesites
         configuration.setAllowedOriginPatterns(List.of(
                 "https://*.vercel.app",
-                "http://localhost:3000",
-                "http://localhost:19000", // Expo
-                "http://localhost:8081"   // Expo Metro
+                "http://localhost:[*]",
+                "https://localhost:[*]"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token", "apollo-require-preflight"));
