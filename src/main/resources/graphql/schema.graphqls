@@ -4,7 +4,7 @@ type CocheOutput {
     marca: String
     motor: String
     anio: Int
-    imagenUrl: String
+    imagen: String
     tipo: String
 }
 
@@ -13,16 +13,146 @@ input CocheInput {
     marca: String
     motor: String
     anio: Int
-    imagenUrl: String
+    imagen: String
     tipo: String
 }
 
-type Query {
 
-    getCoches : [CocheOutput]
+
+
+type RepuestoOpcion {
+    nombre: String
+    marca: String
+    duracionKm: Int
+    duracionMeses: Int
+    enlaceCompra: String
+}
+
+input RepuestoInput {
+    nombre: String
+    marca: String
+    duracionKm: Int
+    duracionMeses: Int
+    enlaceCompra: String
+}
+
+type HistorialMantenimiento {
+    id: ID!
+    usuarioId: String!
+    cocheGarajeId: String!
+    cocheApodo: String
+    mantenimientoId: String
+    tarea: String!
+    fechaRealizado: String!
+    kilometrosRealizado: Int!
+    coste: Float
+    taller: String
+    observaciones: String
+    proximoCambioKm: Int
+    proximoCambioFecha: String
+    repuestoSeleccionado: RepuestoOpcion
+}
+
+input RegistroMantenimientoInput {
+    usuarioId: String!
+    cocheGarajeId: String!
+    mantenimientoId: String
+    tarea: String!
+    fechaRealizado: String!
+    kilometrosRealizado: Int!
+    coste: Float
+    taller: String
+    observaciones: String
+    repuestoSeleccionado: RepuestoInput
+}
+
+type Mantenimiento {
+    id: ID!
+    aplicaA: [String]
+    tarea: String!
+    intervaloKm: Int
+    intervaloMeses: Int
+    opcionesRepuestos: [RepuestoOpcion]
+}
+
+input MantenimientoInput {
+    aplicaA: [String]
+    tarea: String!
+    intervaloKm: Int
+    intervaloMeses: Int
+    opcionesRepuestos: [RepuestoInput]
+}
+
+# --- ZONA DE USUARIOS Y SEGURIDAD ---
+
+input RegistroInput {
+    nombre: String!
+    email: String!
+    password: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type Usuario {
+    id: ID
+    nombre: String
+    email: String
+    avatar: String
+}
+
+type AuthResponse {
+    usuario: Usuario
+    token: String
+}
+
+# --- ZONA DE GARAJE ---
+
+input GarajeInput {
+    usuarioId: String!
+    cocheId: String!
+    apodo: String!
+    kilometrajeActual: Int
+}
+
+type GarajeOutput {
+    id: ID
+    usuarioId: String
+    apodo: String
+    kilometrajeActual: Int
+    coche: CocheOutput
 }
 
 
+
+
+type Query {
+    getCoches : [CocheOutput]
+
+    obtenerMiGaraje(usuarioId: String!): [GarajeOutput]
+    obtenerMantenimientosPorCoche(cocheId: String!): [Mantenimiento]
+    obtenerMantenimientosRecomendados(cocheGarajeId: String!): [Mantenimiento]
+    obtenerHistorialPorCoche(cocheGarajeId: String!): [HistorialMantenimiento]
+    obtenerHistorialUsuario(usuarioId: String!): [HistorialMantenimiento]
+}
+
 type Mutation {
     crearCoche(input: CocheInput): CocheOutput
+
+    anadirCocheGaraje(input: GarajeInput!): GarajeOutput
+
+    registrarUsuario(input: RegistroInput!): Usuario
+
+    login(input: LoginInput!): AuthResponse
+    loginConGoogle(idToken: String!): AuthResponse
+
+    anadirMantenimiento(input: MantenimientoInput!): Mantenimiento
+
+    eliminarCocheDeGaraje(usuarioId: String!, cocheId: String!): Boolean
+
+    registrarMantenimiento(input: RegistroMantenimientoInput!): HistorialMantenimiento
+
+    actualizarUsuario(id: ID!, nombre: String, avatar: String): Usuario
 }

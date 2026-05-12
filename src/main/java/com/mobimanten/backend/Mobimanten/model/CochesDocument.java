@@ -20,7 +20,7 @@ public class CochesDocument {
     private String motor;
     private Integer anio;
     private String tipo;
-    private String imagenUrl;
+    private String imagen;
     private boolean isDelete = false;
 
 

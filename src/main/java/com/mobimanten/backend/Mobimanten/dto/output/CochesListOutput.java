@@ -7,7 +7,7 @@ public record CochesListOutput(
         String marca,
         String motor,
         Integer anio,
-        String imagenUrl,
+        String imagen,
         String tipo
 
 ) {

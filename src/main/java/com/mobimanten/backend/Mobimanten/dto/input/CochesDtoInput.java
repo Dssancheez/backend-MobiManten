@@ -6,7 +6,7 @@ public record CochesDtoInput (
         String marca,
         String motor,
         Integer anio,
-        String imagenUrl,
+        String imagen,
         String tipo
 ){
 
