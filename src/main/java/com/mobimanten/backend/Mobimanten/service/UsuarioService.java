@@ -73,18 +73,22 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public AuthResponse loginConGoogle(String idToken) {
         try {
+            System.out.println("Verificando token de Google para Client ID: " + googleClientId);
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                     .setAudience(Collections.singletonList(googleClientId))
                     .build();
 
             GoogleIdToken googleIdToken = verifier.verify(idToken);
             if (googleIdToken == null) {
+                System.err.println("Token de Google inválido (verifier.verify(idToken) devolvió null)");
                 throw new RuntimeException("Error: Token de Google inválido");
             }
 
             GoogleIdToken.Payload payload = googleIdToken.getPayload();
             String email = payload.getEmail();
             String nombre = (String) payload.get("name");
+            
+            System.out.println("Usuario Google autenticado: " + email);
 
             Optional<UsuariosDocument> usuarioExistente = usuarioRepository.findByEmail(email);
             UsuariosDocument usuario;
@@ -93,10 +97,10 @@ public class UsuarioService implements IUsuarioService {
                 usuario = usuarioExistente.get();
             } else {
                 // Registro automático
+                System.out.println("Registrando nuevo usuario desde Google: " + email);
                 usuario = new UsuariosDocument();
                 usuario.setEmail(email);
                 usuario.setNombre(nombre);
-                // Para usuarios de Google, ponemos una contraseña aleatoria ya que no la usarán
                 usuario.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                 usuario = usuarioRepository.save(usuario);
             }
@@ -105,6 +109,8 @@ public class UsuarioService implements IUsuarioService {
             return new AuthResponse(usuario, token);
 
         } catch (Exception e) {
+            System.err.println("Error en loginConGoogle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Error al autenticar con Google: " + e.getMessage());
         }
     }
