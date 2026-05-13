@@ -41,12 +41,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Permitimos Vercel, localhost y cualquier otro origen que necesites
+        // Permitimos Vercel, localhost y cualquier otro origen qu necesites
         configuration.setAllowedOriginPatterns(List.of(
                 "https://*.vercel.app",
+                "https://mobimanten.es",
+                "https://www.mobimanten.es",
                 "http://localhost:[*]",
                 "https://localhost:[*]"
         ));
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token", "apollo-require-preflight"));
         configuration.setExposedHeaders(List.of("Authorization"));
