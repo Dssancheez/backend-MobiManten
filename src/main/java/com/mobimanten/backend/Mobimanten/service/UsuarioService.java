@@ -73,45 +73,67 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public AuthResponse loginConGoogle(String idToken) {
         try {
-            System.out.println("Verificando token de Google para Client ID: " + googleClientId);
+            String trimmedClientId = googleClientId != null ? googleClientId.trim() : null;
+            System.out.println("--- Inicio Verificación Google ---");
+            System.out.println("Client ID configurado: [" + trimmedClientId + "]");
+            
+            if (idToken == null || idToken.isEmpty()) {
+                throw new RuntimeException("El idToken recibido está vacío");
+            }
+            
+            System.out.println("Longitud del token recibido: " + idToken.length());
+
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                    .setAudience(Collections.singletonList(googleClientId))
+                    .setAudience(Collections.singletonList(trimmedClientId))
                     .build();
 
-            GoogleIdToken googleIdToken = verifier.verify(idToken);
+            GoogleIdToken googleIdToken = null;
+            try {
+                googleIdToken = verifier.verify(idToken);
+            } catch (Exception e) {
+                System.err.println("Excepción durante verifier.verify: " + e.getClass().getName() + " - " + e.getMessage());
+                throw new RuntimeException("Fallo técnico al verificar el token: " + e.getMessage());
+            }
+
             if (googleIdToken == null) {
-                System.err.println("Token de Google inválido (verifier.verify(idToken) devolvió null)");
-                throw new RuntimeException("Error: Token de Google inválido");
+                System.err.println("VERIFICACIÓN FALLIDA: verifier.verify(idToken) devolvió null.");
+                System.err.println("Causa probable: El idToken no fue emitido para el Client ID configurado o ha expirado.");
+                throw new RuntimeException("Token de Google inválido o audiencia (client_id) no coincide");
             }
 
             GoogleIdToken.Payload payload = googleIdToken.getPayload();
             String email = payload.getEmail();
             String nombre = (String) payload.get("name");
             
-            System.out.println("Usuario Google autenticado: " + email);
+            System.out.println("Autenticación exitosa para: " + email);
 
             Optional<UsuariosDocument> usuarioExistente = usuarioRepository.findByEmail(email);
             UsuariosDocument usuario;
 
             if (usuarioExistente.isPresent()) {
                 usuario = usuarioExistente.get();
+                System.out.println("Usuario existente encontrado en DB: " + usuario.getId());
             } else {
-                // Registro automático
                 System.out.println("Registrando nuevo usuario desde Google: " + email);
                 usuario = new UsuariosDocument();
                 usuario.setEmail(email);
                 usuario.setNombre(nombre);
                 usuario.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                 usuario = usuarioRepository.save(usuario);
+                System.out.println("Nuevo usuario creado con ID: " + usuario.getId());
             }
 
             String token = jwtService.generateToken(usuario.getEmail());
+            System.out.println("JWT generado con éxito para el cliente");
+            System.out.println("--- Fin Verificación Google ---");
             return new AuthResponse(usuario, token);
 
         } catch (Exception e) {
-            System.err.println("Error en loginConGoogle: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Error al autenticar con Google: " + e.getMessage());
+            System.err.println("Error crítico en loginConGoogle: " + e.getMessage());
+            if (!(e instanceof RuntimeException)) {
+                e.printStackTrace();
+            }
+            throw new RuntimeException(e.getMessage());
         }
     }
 
