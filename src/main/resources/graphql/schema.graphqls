@@ -72,6 +72,7 @@ type Mantenimiento {
     id: ID!
     aplicaA: [String]
     tarea: String!
+    seccion: String
     intervaloKm: Int
     intervaloMeses: Int
     opcionesRepuestos: [RepuestoOpcion]
@@ -80,6 +81,7 @@ type Mantenimiento {
 input MantenimientoInput {
     aplicaA: [String]
     tarea: String!
+    seccion: String
     intervaloKm: Int
     intervaloMeses: Int
     opcionesRepuestos: [RepuestoInput]

@@ -17,6 +17,7 @@ public class MantenimientoDocument {
 
     private List<String> aplicaA; // ej: ["DIESEL", "GASOLINA", "TODOS"]
     private String tarea;
+    private String seccion;
     private Integer intervaloKm;
     private Integer intervaloMeses;
 

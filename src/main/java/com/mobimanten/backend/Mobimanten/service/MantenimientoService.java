@@ -35,6 +35,7 @@ public class MantenimientoService implements IMantenimientoService {
         MantenimientoDocument nuevoMantenimiento = new MantenimientoDocument();
         nuevoMantenimiento.setAplicaA(input.aplicaA());
         nuevoMantenimiento.setTarea(input.tarea());
+        nuevoMantenimiento.setSeccion(input.seccion());
         nuevoMantenimiento.setIntervaloKm(input.intervaloKm());
         nuevoMantenimiento.setIntervaloMeses(input.intervaloMeses());
         
