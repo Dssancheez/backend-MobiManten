@@ -61,6 +61,7 @@ public class MantenimientoService implements IMantenimientoService {
         etiquetas.add("TODOS");
 
         if (coche.getMotor() != null) etiquetas.add(coche.getMotor().toUpperCase());
+        if (coche.getCombustible() != null) etiquetas.add(coche.getCombustible().toUpperCase());
         if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
         if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
 
@@ -83,6 +84,7 @@ public class MantenimientoService implements IMantenimientoService {
         if (cocheOpt.isPresent()) {
             CochesDocument coche = cocheOpt.get();
             if (coche.getMotor() != null) etiquetas.add(coche.getMotor().toUpperCase());
+            if (coche.getCombustible() != null) etiquetas.add(coche.getCombustible().toUpperCase());
             if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
             if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
         }

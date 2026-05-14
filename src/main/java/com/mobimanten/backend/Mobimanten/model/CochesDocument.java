@@ -18,6 +18,7 @@ public class CochesDocument {
     private String modelo;
     private String marca;
     private String motor;
+    private String combustible;
     private Integer anio;
     private String tipo;
     private String imagen;

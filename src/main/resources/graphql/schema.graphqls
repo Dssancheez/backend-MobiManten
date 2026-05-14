@@ -3,6 +3,7 @@ type CocheOutput {
     modelo: String
     marca: String
     motor: String
+    combustible: String
     anio: Int
     imagen: String
     tipo: String
@@ -12,6 +13,7 @@ input CocheInput {
     modelo: String
     marca: String
     motor: String
+    combustible: String
     anio: Int
     imagen: String
     tipo: String

@@ -22,6 +22,7 @@ public class CocheService implements ICocheService{
                 doc.getModelo(),
                 doc.getMarca(),
                 doc.getMotor(),
+                doc.getCombustible(),
                 doc.getAnio(),
                 doc.getImagen(),
                 doc.getTipo()
@@ -32,6 +33,7 @@ public class CocheService implements ICocheService{
         doc.setModelo(input.modelo());
         doc.setMarca(input.marca());
         doc.setMotor(input.motor());
+        doc.setCombustible(input.combustible());
         doc.setAnio(input.anio());
         doc.setImagen(input.imagen());
         doc.setTipo(input.tipo());
