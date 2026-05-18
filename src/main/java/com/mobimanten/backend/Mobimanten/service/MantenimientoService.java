@@ -67,6 +67,15 @@ public class MantenimientoService implements IMantenimientoService {
         if (coche.getCombustible() != null) etiquetas.add(coche.getCombustible().toUpperCase());
         if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
         if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
+        
+        if (coche.getModelo() != null && !coche.getModelo().trim().isEmpty()) {
+            String modeloLimpio = coche.getModelo().trim().split("\\s+")[0].toUpperCase();
+            etiquetas.add("MODELO:" + modeloLimpio);
+        }
+
+        if (coche.getMarca() != null && coche.getMotor() != null) {
+            etiquetas.add("MARCA:" + coche.getMarca().toUpperCase() + "_" + coche.getMotor().toUpperCase());
+        }
 
         List<MantenimientoDocument> mantenimientos = mantenimientoRepository.findByAplicaAIn(etiquetas);
         int cocheAnio = coche.getAnio() != null ? coche.getAnio() : 0;
@@ -100,6 +109,15 @@ public class MantenimientoService implements IMantenimientoService {
             if (coche.getCombustible() != null) etiquetas.add(coche.getCombustible().toUpperCase());
             if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
             if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
+            
+            if (coche.getModelo() != null && !coche.getModelo().trim().isEmpty()) {
+                String modeloLimpio = coche.getModelo().trim().split("\\s+")[0].toUpperCase();
+                etiquetas.add("MODELO:" + modeloLimpio);
+            }
+
+            if (coche.getMarca() != null && coche.getMotor() != null) {
+                etiquetas.add("MARCA:" + coche.getMarca().toUpperCase() + "_" + coche.getMotor().toUpperCase());
+            }
         }
 
         List<MantenimientoDocument> mantenimientos = mantenimientoRepository.findByAplicaAIn(etiquetas);
