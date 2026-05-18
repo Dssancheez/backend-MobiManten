@@ -8,5 +8,7 @@ public record MantenimientoInput(
         String seccion,
         Integer intervaloKm,
         Integer intervaloMeses,
+        Integer anioDesde,
+        Integer anioHasta,
         List<RepuestoInput> opcionesRepuestos
 ) {}

@@ -75,6 +75,8 @@ type Mantenimiento {
     seccion: String
     intervaloKm: Int
     intervaloMeses: Int
+    anioDesde: Int
+    anioHasta: Int
     opcionesRepuestos: [RepuestoOpcion]
 }
 
@@ -84,6 +86,8 @@ input MantenimientoInput {
     seccion: String
     intervaloKm: Int
     intervaloMeses: Int
+    anioDesde: Int
+    anioHasta: Int
     opcionesRepuestos: [RepuestoInput]
 }
 

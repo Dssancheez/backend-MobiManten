@@ -21,5 +21,8 @@ public class MantenimientoDocument {
     private Integer intervaloKm;
     private Integer intervaloMeses;
 
+    private Integer anioDesde;
+    private Integer anioHasta;
+
     private List<RepuestoOpcion> opcionesRepuestos;
 }

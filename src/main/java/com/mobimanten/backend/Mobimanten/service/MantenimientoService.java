@@ -38,6 +38,8 @@ public class MantenimientoService implements IMantenimientoService {
         nuevoMantenimiento.setSeccion(input.seccion());
         nuevoMantenimiento.setIntervaloKm(input.intervaloKm());
         nuevoMantenimiento.setIntervaloMeses(input.intervaloMeses());
+        nuevoMantenimiento.setAnioDesde(input.anioDesde());
+        nuevoMantenimiento.setAnioHasta(input.anioHasta());
         
         if (input.opcionesRepuestos() != null) {
             List<RepuestoOpcion> opciones = input.opcionesRepuestos().stream()
@@ -66,7 +68,15 @@ public class MantenimientoService implements IMantenimientoService {
         if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
         if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
 
-        return mantenimientoRepository.findByAplicaAIn(etiquetas);
+        List<MantenimientoDocument> mantenimientos = mantenimientoRepository.findByAplicaAIn(etiquetas);
+        int cocheAnio = coche.getAnio() != null ? coche.getAnio() : 0;
+
+        return mantenimientos.stream().filter(m -> {
+            if (cocheAnio == 0) return true;
+            if (m.getAnioDesde() != null && cocheAnio < m.getAnioDesde()) return false;
+            if (m.getAnioHasta() != null && cocheAnio > m.getAnioHasta()) return false;
+            return true;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -82,14 +92,23 @@ public class MantenimientoService implements IMantenimientoService {
         List<String> etiquetas = new ArrayList<>();
         etiquetas.add("TODOS"); // Siempre incluir los universales
 
+        int cocheAnio = 0;
         if (cocheOpt.isPresent()) {
             CochesDocument coche = cocheOpt.get();
+            cocheAnio = coche.getAnio() != null ? coche.getAnio() : 0;
             if (coche.getMotor() != null) etiquetas.add(coche.getMotor().toUpperCase());
             if (coche.getCombustible() != null) etiquetas.add(coche.getCombustible().toUpperCase());
             if (coche.getTipo() != null) etiquetas.add(coche.getTipo().toUpperCase());
             if (coche.getMarca() != null) etiquetas.add("MARCA:" + coche.getMarca().toUpperCase());
         }
 
-        return mantenimientoRepository.findByAplicaAIn(etiquetas);
+        List<MantenimientoDocument> mantenimientos = mantenimientoRepository.findByAplicaAIn(etiquetas);
+        final int anio = cocheAnio;
+        return mantenimientos.stream().filter(m -> {
+            if (anio == 0) return true;
+            if (m.getAnioDesde() != null && anio < m.getAnioDesde()) return false;
+            if (m.getAnioHasta() != null && anio > m.getAnioHasta()) return false;
+            return true;
+        }).collect(Collectors.toList());
     }
 }
