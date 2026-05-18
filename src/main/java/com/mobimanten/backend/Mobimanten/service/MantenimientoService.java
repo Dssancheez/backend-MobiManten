@@ -90,7 +90,7 @@ public class MantenimientoService implements IMantenimientoService {
         Optional<CochesDocument> cocheOpt = cochesRepository.findById(garaje.getCocheId());
         
         List<String> etiquetas = new ArrayList<>();
-        etiquetas.add("TODOS"); // Siempre incluir los universales
+        etiquetas.add("TODOS");
 
         int cocheAnio = 0;
         if (cocheOpt.isPresent()) {
