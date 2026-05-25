@@ -2,8 +2,8 @@ spring.application.name=backend-Mobimanten
 server.port=${PORT:8080}
 
 # MongoDB Atlas / Railway connection string
-spring.mongodb.uri=${MONGO_URL}
-spring.mongodb.database=mobimanten_db
+spring.data.mongodb.uri=${MONGO_URL}
+spring.data.mongodb.database=mobimanten_db
 
 # GraphQL
 spring.graphql.graphiql.enabled=true
