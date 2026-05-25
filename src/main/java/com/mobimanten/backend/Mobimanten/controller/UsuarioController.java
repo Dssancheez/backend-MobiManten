@@ -22,7 +22,7 @@ public class UsuarioController {
 
     @GraphQlExceptionHandler
     public GraphQLError handle(Exception ex) {
-        ex.printStackTrace(); // Imprime el error en los logs de Railway/Consola
+        ex.printStackTrace();
         return GraphqlErrorBuilder.newError()
                 .errorType(ErrorType.BAD_REQUEST)
                 .message(ex.getMessage())

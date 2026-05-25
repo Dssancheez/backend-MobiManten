@@ -38,7 +38,7 @@ public class HistorialService implements IHistorialService {
         historial.setTaller(input.taller());
         historial.setObservaciones(input.observaciones());
 
-        // Mapear repuesto seleccionado (opcional)
+
         if (input.repuestoSeleccionado() != null) {
             RepuestoOpcion repuesto = new RepuestoOpcion(
                     input.repuestoSeleccionado().nombre(),
@@ -49,7 +49,7 @@ public class HistorialService implements IHistorialService {
             );
             historial.setRepuestoSeleccionado(repuesto);
 
-            // Lógica Inteligente: Calcular próximo mantenimiento basado en el repuesto
+
             if (repuesto.getDuracionKm() != null) {
                 historial.setProximoCambioKm(input.kilometrosRealizado() + repuesto.getDuracionKm());
             }
@@ -58,7 +58,7 @@ public class HistorialService implements IHistorialService {
                 historial.setProximoCambioFecha(historial.getFechaRealizado().plusMonths(repuesto.getDuracionMeses()));
             }
         } else if (input.mantenimientoId() != null && !input.mantenimientoId().isEmpty()) {
-            // Lógica Inteligente: Si no hay repuesto, usar intervalos por defecto del catálogo
+
             mantenimientoRepository.findById(input.mantenimientoId()).ifPresent(m -> {
                 if (m.getIntervaloKm() != null) {
                     historial.setProximoCambioKm(input.kilometrosRealizado() + m.getIntervaloKm());
@@ -69,7 +69,7 @@ public class HistorialService implements IHistorialService {
             });
         }
 
-        // Actualizar kilometraje del coche en el garaje y obtener apodo
+
         garajeRepository.findById(input.cocheGarajeId()).ifPresent(garaje -> {
             historial.setCocheApodo(garaje.getApodo());
             garaje.setKilometrajeActual(input.kilometrosRealizado());

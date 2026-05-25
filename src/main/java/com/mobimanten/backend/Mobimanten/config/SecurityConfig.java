@@ -41,7 +41,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Permitimos Vercel, localhost y cualquier otro origen qu necesites
+
         configuration.setAllowedOriginPatterns(List.of(
                 "https://*.vercel.app",
                 "https://mobimanten.es",
