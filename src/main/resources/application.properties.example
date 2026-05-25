@@ -1,0 +1,17 @@
+spring.application.name=backend-Mobimanten
+server.port=${PORT:8080}
+
+# MongoDB Atlas / Railway connection string
+spring.mongodb.uri=${MONGO_URL}
+spring.mongodb.database=mobimanten_db
+
+# GraphQL
+spring.graphql.graphiql.enabled=true
+logging.level.org.springframework.data.mongodb.core.MongoTemplate=DEBUG
+
+# Google OAuth2
+google.client.id=${GOOGLE_CLIENT_ID}
+google.client.secret=${GOOGLE_CLIENT_SECRET}
+
+# JWT - use a long random hex string (min 64 chars)
+jwt.secret=${JWT_SECRET}

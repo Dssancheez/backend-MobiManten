@@ -15,7 +15,7 @@ public class MantenimientoDocument {
     @Id
     private String id;
 
-    private List<String> aplicaA; // ej: ["DIESEL", "GASOLINA", "TODOS"]
+    private List<String> aplicaA;
     private String tarea;
     private String seccion;
     private Integer intervaloKm;

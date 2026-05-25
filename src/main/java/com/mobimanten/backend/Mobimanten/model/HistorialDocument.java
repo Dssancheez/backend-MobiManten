@@ -15,8 +15,8 @@ public class HistorialDocument {
     private String id;
     private String usuarioId;
     private String cocheGarajeId;
-    private String cocheApodo; // Para mostrar en el historial global
-    private String mantenimientoId; // Referencia al catálogo
+    private String cocheApodo; 
+    private String mantenimientoId; 
     private String tarea;
 
     private LocalDate fechaRealizado;
