@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.mobimanten.backend.Mobimanten.mapper.UsuarioMapper;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -31,26 +32,18 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     @Value("${google.client.id}")
     private String googleClientId;
-
-    public UsuariosDocument mapearUsuario(RegistroInput input) {
-        UsuariosDocument usuario = new UsuariosDocument();
-        usuario.setEmail(input.email());
-        usuario.setNombre(input.nombre());
-        String password = passwordEncoder.encode(input.password());
-        usuario.setPassword(password);
-
-        return usuario;
-
-    }
 
     public UsuariosDocument registrarUsuario(RegistroInput input) {
         if (usuarioRepository.findByEmail(input.email()).isPresent()) {
             throw new RuntimeException("El email ya está registrado");
         }
 
-        UsuariosDocument nuevoUsuario = mapearUsuario(input);
+        UsuariosDocument nuevoUsuario = usuarioMapper.toDocument(input);
 
         return usuarioRepository.save(nuevoUsuario);
     }
@@ -115,10 +108,7 @@ public class UsuarioService implements IUsuarioService {
                 System.out.println("Usuario existente encontrado en DB: " + usuario.getId());
             } else {
                 System.out.println("Registrando nuevo usuario desde Google: " + email);
-                usuario = new UsuariosDocument();
-                usuario.setEmail(email);
-                usuario.setNombre(nombre);
-                usuario.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+                usuario = usuarioMapper.toGoogleUserDocument(email, nombre);
                 usuario = usuarioRepository.save(usuario);
                 System.out.println("Nuevo usuario creado con ID: " + usuario.getId());
             }

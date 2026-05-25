@@ -3,9 +3,11 @@ package com.mobimanten.backend.Mobimanten.service;
 import com.mobimanten.backend.Mobimanten.dto.input.GarajeInput;
 import com.mobimanten.backend.Mobimanten.model.GarajeDocument;
 import com.mobimanten.backend.Mobimanten.repository.GarajeRepository;
+import com.mobimanten.backend.Mobimanten.mapper.GarajeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -14,14 +16,12 @@ public class GarajeService implements IGarajeService{
     @Autowired
     private GarajeRepository garajeRepository;
 
+    @Autowired
+    private GarajeMapper garajeMapper;
+
     @Override
     public GarajeDocument anadirCoche(GarajeInput input){
-        GarajeDocument nuevoRegistro = new GarajeDocument();
-        nuevoRegistro.setUsuarioId(input.usuarioId());
-        nuevoRegistro.setCocheId(input.cocheId());
-        nuevoRegistro.setApodo(input.apodo());
-        nuevoRegistro.setKilometrajeActual(input.kilometrajeActual());
-        nuevoRegistro.setFechaUltimaActualizacionKm(java.time.LocalDate.now());
+        GarajeDocument nuevoRegistro = garajeMapper.toDocument(input);
 
         return garajeRepository.save(nuevoRegistro);
 

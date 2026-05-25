@@ -4,6 +4,8 @@ import com.mobimanten.backend.Mobimanten.dto.input.CochesDtoInput;
 import com.mobimanten.backend.Mobimanten.dto.output.CochesListOutput;
 import com.mobimanten.backend.Mobimanten.model.CochesDocument;
 import com.mobimanten.backend.Mobimanten.repository.CochesRepository;
+import com.mobimanten.backend.Mobimanten.repository.CochesRepository;
+import com.mobimanten.backend.Mobimanten.mapper.CocheMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,47 +17,23 @@ public class CocheService implements ICocheService{
     @Autowired
     private CochesRepository cochesRepository;
 
-
-    public CochesListOutput toOutput (CochesDocument doc){
-        return  new CochesListOutput(
-                doc.getId(),
-                doc.getModelo(),
-                doc.getMarca(),
-                doc.getMotor(),
-                doc.getCombustible(),
-                doc.getAnio(),
-                doc.getImagen(),
-                doc.getTipo()
-        );
-    }
-    public CochesDocument toDocument (CochesDtoInput input){
-        CochesDocument doc = new CochesDocument();
-        doc.setModelo(input.modelo());
-        doc.setMarca(input.marca());
-        doc.setMotor(input.motor());
-        doc.setCombustible(input.combustible());
-        doc.setAnio(input.anio());
-        doc.setImagen(input.imagen());
-        doc.setTipo(input.tipo());
-        doc.setDelete(false);
-        return doc;
-    }
-
+    @Autowired
+    private CocheMapper cocheMapper;
     
     @Override
     public List<CochesListOutput> getCoches (){
         return cochesRepository.findByIsDeleteFalse()
                 .stream()
-                .map(this::toOutput)
+                .map(cocheMapper::toOutput)
                 .toList();
     }
 
     @Override
     public CochesListOutput crearCoche(CochesDtoInput input) {
 
-        CochesDocument doc = toDocument(input);
+        CochesDocument doc = cocheMapper.toDocument(input);
         CochesDocument saved =  cochesRepository.save(doc);
-        return toOutput(saved);
+        return cocheMapper.toOutput(saved);
     }
 
 

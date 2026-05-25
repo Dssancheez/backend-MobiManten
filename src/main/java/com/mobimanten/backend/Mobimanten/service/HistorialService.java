@@ -7,6 +7,8 @@ import com.mobimanten.backend.Mobimanten.model.RepuestoOpcion;
 import com.mobimanten.backend.Mobimanten.repository.GarajeRepository;
 import com.mobimanten.backend.Mobimanten.repository.HistorialRepository;
 import com.mobimanten.backend.Mobimanten.repository.MantenimientoRepository;
+import com.mobimanten.backend.Mobimanten.repository.MantenimientoRepository;
+import com.mobimanten.backend.Mobimanten.mapper.HistorialMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class HistorialService implements IHistorialService {
     private HistorialRepository historialRepository;
 
     @Autowired
+    private HistorialMapper historialMapper;
+
+    @Autowired
     private GarajeRepository garajeRepository;
 
     @Autowired
@@ -27,16 +32,7 @@ public class HistorialService implements IHistorialService {
 
     @Override
     public HistorialDocument registrarMantenimientoInteligente(RegistroMantenimientoInput input) {
-        HistorialDocument historial = new HistorialDocument();
-        historial.setUsuarioId(input.usuarioId());
-        historial.setCocheGarajeId(input.cocheGarajeId());
-        historial.setMantenimientoId(input.mantenimientoId());
-        historial.setTarea(input.tarea());
-        historial.setFechaRealizado(LocalDate.parse(input.fechaRealizado()));
-        historial.setKilometrosRealizado(input.kilometrosRealizado());
-        historial.setCoste(input.coste());
-        historial.setTaller(input.taller());
-        historial.setObservaciones(input.observaciones());
+        HistorialDocument historial = historialMapper.toDocument(input);
 
 
         if (input.repuestoSeleccionado() != null) {

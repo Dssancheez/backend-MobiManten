@@ -9,6 +9,8 @@ import com.mobimanten.backend.Mobimanten.model.RepuestoOpcion;
 import com.mobimanten.backend.Mobimanten.repository.CochesRepository;
 import com.mobimanten.backend.Mobimanten.repository.GarajeRepository;
 import com.mobimanten.backend.Mobimanten.repository.MantenimientoRepository;
+import com.mobimanten.backend.Mobimanten.repository.MantenimientoRepository;
+import com.mobimanten.backend.Mobimanten.mapper.MantenimientoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class MantenimientoService implements IMantenimientoService {
     private MantenimientoRepository mantenimientoRepository;
 
     @Autowired
+    private MantenimientoMapper mantenimientoMapper;
+
+    @Autowired
     private GarajeRepository garajeRepository;
 
     @Autowired
@@ -32,23 +37,7 @@ public class MantenimientoService implements IMantenimientoService {
 
     @Override
     public MantenimientoDocument anadirMantenimiento(MantenimientoInput input) {
-        MantenimientoDocument nuevoMantenimiento = new MantenimientoDocument();
-        nuevoMantenimiento.setAplicaA(input.aplicaA());
-        nuevoMantenimiento.setTarea(input.tarea());
-        nuevoMantenimiento.setSeccion(input.seccion());
-        nuevoMantenimiento.setIntervaloKm(input.intervaloKm());
-        nuevoMantenimiento.setIntervaloMeses(input.intervaloMeses());
-        nuevoMantenimiento.setAnioDesde(input.anioDesde());
-        nuevoMantenimiento.setAnioHasta(input.anioHasta());
-        
-        if (input.opcionesRepuestos() != null) {
-            List<RepuestoOpcion> opciones = input.opcionesRepuestos().stream()
-                    .map(r -> new RepuestoOpcion(r.nombre(), r.marca(), r.duracionKm(), r.duracionMeses(), r.enlaceCompra()))
-                    .collect(Collectors.toList());
-            nuevoMantenimiento.setOpcionesRepuestos(opciones);
-        }
-
-
+        MantenimientoDocument nuevoMantenimiento = mantenimientoMapper.toDocument(input);
         return mantenimientoRepository.save(nuevoMantenimiento);
     }
 
